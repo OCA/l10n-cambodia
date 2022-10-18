@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_kh_tax_invoice">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-if="not o" t-set="o" t-value="doc"/>
+                    <!-- Multicompany -->
+                    <t t-if="o and 'company_id' in o">
+                        <t t-set="company" t-value="o.company_id"/>
+                    </t>
+                    <t t-if="not o or not 'company_id' in o">
+                        <t t-set="company" t-value="res_company"/>
+                    </t>
+
+                    <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+                        <div class="header">
+                            <div class="row" style="font-size:18px;">
+                                <div class="col-2">
+                                    <img style="max-height:100px;" t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                                </div>
+                                <div class="col-9" style="text-align:center;">
+                                    <div style="font-family:'Moul', cursive;padding-top:10px;"><h5><span t-esc="company.partner_id.khmer_name"/></h5></div>
+                                    <div><h5><span t-field="company.partner_id.name"/></h5></div>
+                                    <div style="font-size:14px;font-family:'Khmer Os Battambang',cursive;">លេខអត្តសញ្ញាណកម្ម អ.ត.ប (VAT TIN): <t t-esc="company.partner_id.vat"/></div>
+                                    <div style="font-size:14px;font-family:'Khmer Os Battambang',cursive;">អាស័យដ្ឋាន៖ <span t-esc="company.partner_id.street2"/></div>
+                                    <div style="font-size:14px;">Address:<span t-esc="company.partner_id.street"/> </div>
+                                    <div style="font-size:12px;font-family:'Khmer Os Battambang',cursive;">លេខទូរស័ព្ទ/Telephone N0: <span t-esc="company.partner_id.phone"/>  </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="page">
+                            <div class="text-center" style="font-family:'Moul',cursive;padding-top:35px;font-size:16px">
+                                <span>វិក្កយបត្រអាករ<br/>Tax Invoice</span>
+                            </div>
+                            <div class="row">
+                                <div class="col-8">
+                                    <table class="table table-borderless" style="font-family:'Khmer Os Battambang',cursive;font-size:14px;">
+                                        <tr>
+                                            <td style="width:150px;padding:0px;">
+                                                <span>ឈ្មោះក្រុមហ៊ុន ឬ អតិថិជន</span>
+                                            </td>
+                                            <td style="padding:0px;">: <span t-field="o.partner_id.khmer_name"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:150px;padding:0px;">
+                                                <span>Company Name/Customer</span>
+                                            </td>
+                                            <td style="padding:0px;">: <span t-field="o.partner_id.name"/></td>
+                                        </tr>
+                                        <tr t-if="o.partner_id.street2">
+                                            <td style="width:150px;padding:0px;"><span>អាស័យដ្ឋាន</span></td>
+                                            <td style="width:250px;padding:0px;">
+                                                : <span t-field="o.partner_id.street2"/>
+                                            </td>
+                                        </tr>
+                                        <t t-if="o.partner_id.street">
+                                            <tr>
+                                                <td style="width:150px;padding:0px;"><span>Address</span></td>
+                                                <td style="width:250px;padding:0px;">
+                                                : <span t-field="o.partner_id.street"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr>
+                                            <td style="width:150px;padding:0px;"><span>លេខទូរស័ព្ទ (Telephone N0)</span></td>
+                                            <td style="padding:0px;">
+                                                : <t t-if="o.partner_id.phone"><span t-field="o.partner_id.phone"/></t>
+                                                <t t-if="o.partner_id.mobile">/ <span t-field="o.partner_id.mobile"/></t>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="o.partner_id.email">
+                                            <td style="width:150px;padding:0px;"><span>អ៊ីមែល (Email)</span></td>
+                                            <td style="padding:0px;">: <span t-field="o.partner_id.email"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div>
+                                    <table class="table table-borderless" style="font-family:'Khmer Os Battambang',cursive;font-size:14px;">
+                                        <tr style="">
+                                            <td style="padding:0px;"><span>លេខរៀងវិក្កយបត្រ៖<br/>Invoice N0</span></td>
+                                            <td style="padding:0px;">: <span t-field="o.name"/></td>
+                                        </tr>
+                                        <tr style="">
+                                            <td style="padding:0px;"><span>កាលបរិច្ឆេទ៖<br/>Date:/dd/mm/yy</span></td>
+                                            <td style="padding:0px;">: <span t-field="o.invoice_date" t-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"/></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row mb-1 mt-1">
+                                <div class="col-8">
+                                    <table class="table table-borderless" style="font-family:'Khmer Os Battambang',cursive;font-size:14px;">
+                                        <tr t-if="o.partner_id.vat">
+                                            <td style="padding:0px;"><span>លេខអត្តសញ្ញាណកម្ម អ.ត.ប (VAT TIN)</span> : <strong><span t-field="o.partner_id.vat"/></strong></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <table class="table table-borderless" style="font-family:'Khmer Os Battambang',cursive;font-size:14px;">
+                                <thead>
+                                    <tr style="background-color:#D3D3D3">
+                                        <td class="text-center" style="padding:1px;border:1px solid black; width: 20px">
+                                            <div>ល.រ</div>
+                                            <div>No</div>
+                                        </td>
+                                        <td class="text-center" style="padding:1px;border:1px solid black; width:350px">
+                                            <div>បរិយាយមុខទំនិញឬសេវា</div>
+                                            <div>Description of Goods or Services</div>
+                                        </td>
+                                        <td class="text-center" style="padding:1px;border:1px solid black; width:80px">
+                                            <div>បរិមាណ</div>
+                                            <div>Quantity</div>
+                                        </td>
+                                        <td class="text-center" style="padding:1px;border:1px solid black;width:150px">
+                                            <div>ថ្លៃឯកតា</div>
+                                            <div>Unit Price</div>
+                                        </td>
+                                        <td class="text-center" style="padding:1px;border:1px solid black;width:130px">
+                                            <div>ថ្លៃទំនិញ</div>
+                                            <div>Amount</div>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody class="invoice_tbody">
+                                    <tr t-foreach="o.invoice_line_ids" t-as="l" style="page-break-inside:avoid">
+                                        <td class="text-center" style="border:1px solid black;padding:5px;width: 20px"><span t-esc="l_index+1"/></td>
+                                        <td style="border:1px solid black;padding:5px;">
+                                            <span t-field="l.name"/>
+                                            <t t-if="l.discount != 0.0">Discount:<span t-esc="l.discount"/>%</t>
+                                        </td>
+                                        <td class="text-center" style="border:1px solid black;padding:5px;">
+                                            <span t-esc="'{0:,.0f}'.format(l.quantity)"/>
+                                            <span t-field="l.product_uom_id"/>
+                                        </td>
+                                        <td class="text-right" style="border:1px solid black;padding:5px;">
+                                            <span t-esc="'{0:,.2f}'.format(l.price_unit)"/>
+                                        </td>
+                                        <td class="text-right" style="border:1px solid black;padding:5px;">
+                                            <span t-field="l.price_subtotal" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr style="page-break-inside:avoid">
+                                        <td class="text-right" colspan="4" style="text-align:right;font-weight:bold;padding:5px;">សរុប / Total</td>
+                                        <td class="text-right" style="padding:5px;border:1px solid black;">
+                                            <span t-field="o.amount_untaxed" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr style="page-break-inside:avoid">
+                                        <td class="text-right" colspan="4" style="text-align:right;font-weight:bold;padding:5px;">អាករលើតម្លៃបន្ថែម / VAT 10%</td>
+                                        <td class="text-right" style="padding:5px;border:1px solid black;">
+                                            <span t-field="o.amount_tax" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr style="page-break-inside:avoid">
+                                        <td class="text-right" colspan="4" style="text-align:right;font-weight:bold;padding:5px;">សរុបរួម / Grand Total</td>
+                                        <td class="text-right" style="padding:5px;border:1px solid black;">
+                                            <span t-field="o.amount_total" t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="page-break-inside:avoid">
+                            <div class="row" style="font-family:'Khmer Os Battambang',cursive;padding-top:150px;font-weight:bold;">
+                                <div class="col-4" style="font-size:14px;margin-top: 30px;">
+                                    <div style="border-bottom: 1px solid black; margin-top: 30px;"/>
+                                    <div class="text-center" style="font-size:14px;margin-top: 18px;">ហត្ថលេខានិងឈ្មោះអ្នកទិញ</div>
+                                    <div class="text-center" style="font-size:14px">Customer's Signature &amp; Name</div>
+                                </div>
+                                <div class="col-4 text-center" style="font-size:14px;margin-top: 30px;"/>
+                                <div class="col-4 text-center" style="font-size:14px;margin-top: 30px;">
+                                    <div style="border-bottom: 1px solid black; margin-top: 0px;"/>
+                                    <div style="font-size:14px;margin-top: 18px;">ហត្ថលេខានិងឈ្មោះអ្នកលក់</div>
+                                    <div style="font-size:14px">Seller's Signature &amp; Name</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="col-6" style="font-size:10px;font-family:'Khmer Os Battambang',cursive;">
+                                <span>សម្គាល់៖ ច្បាប់ដើមសម្រាប់អ្នកទិញ ច្បាប់ចម្លងសម្រាប់អ្នកលក់។<br/>
+                                    Note: Original Invoice for Customer, Copied Invoice for Seller.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <record id="action_report_kh_tax_invoice" model="ir.actions.report">
+            <field name="name">Tax Invoice</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_kh_report_layout.report_kh_tax_invoice</field>
+            <field name="report_file">l10n_kh_report_layout.report_kh_tax_invoice</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_type">report</field>
+            <field name="print_report_name">('%s_TI_%s' % (object.partner_id.name,object.name))</field>
+        </record>
+    </data>
+
+</odoo>
